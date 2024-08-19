@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AbraXas MD - Session Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        .container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+        .button-group button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            width: 48%;
+        }
+        .button-group button:hover {
+            background-color: #0056b3;
+        }
+        .output-container {
+            margin-top: 20px;
+            display: none;
+        }
+        .output-container pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .output-container img {
+            max-width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>AbraXas MD - Session Generator</h2>
+        <div class="input-group">
+            <label for="whatsapp-number">WhatsApp Number:</label>
+            <input type="text" id="whatsapp-number" placeholder="Enter WhatsApp Number" />
+        </div>
+        <div class="button-group">
+            <button id="generate-pair-code">Generate Pairing Code</button>
+            <button id="generate-qr-code">Generate QR Code</button>
+        </div>
+        <div id="pair-code-output" class="output-container">
+            <h3>Pairing Code:</h3>
+            <pre id="pair-code-text"></pre>
+        </div>
+        <div id="qr-code-output" class="output-container">
+            <h3>QR Code:</h3>
+            <img id="qr-code-img" src="" alt="QR Code" />
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('generate-pair-code').addEventListener('click', async function() {
+            const number = document.getElementById('whatsapp-number').value;
+            if (!number) {
+                alert('Please enter a WhatsApp number.');
+                return;
+            }
+
+            const response = await fetch('/Rex_PairCode?number=' + number);
+            const data = await response.json();
+            document.getElementById('pair-code-text').textContent = data.code;
+            document.getElementById('pair-code-output').style.display = 'block';
+        });
+
+        document.getElementById('generate-qr-code').addEventListener('click', async function() {
+            const response = await fetch('/Rex_qrCode');
+            const qrCodeBlob = await response.blob();
+            const qrCodeUrl = URL.createObjectURL(qrCodeBlob);
+            document.getElementById('qr-code-img').src = qrCodeUrl;
+            document.getElementById('qr-code-output').style.display = 'block';
+        });
+    </script>
+</body>
+</html>

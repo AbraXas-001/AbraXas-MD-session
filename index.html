@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Generator</title>
+</head>
+<body>
+    <h1>GitHub Username Verification</h1>
+    <form id="github-form">
+        <label for="username">Enter GitHub Username:</label>
+        <input type="text" id="username" name="username" required>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('github-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const response = await fetch(`/verify?username=${username}`);
+            const data = await response.json();
+
+            if (data.success) {
+                window.location.href = '/generator.html';
+            } else {
+                document.getElementById('result').innerText = 'GitHub repository not found or not forked.';
+            }
+        });
+    </script>
+</body>
+</html>
